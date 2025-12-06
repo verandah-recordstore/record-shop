@@ -413,7 +413,7 @@
 
   <footer>
     このページはレコード屋ECサイトのデモです。実際の決済機能は実装されていません。<br />
-    在庫・価格は Googleスプレッドシート側の表を書き換えるだけで更新されます。
+    在庫・価格・画像・試聴リンク・コメントは Googleスプレッドシート側の表を書き換えるだけで更新されます。
   </footer>
 
   <script>
@@ -636,6 +636,19 @@
           ? `<img src="${p.image}" alt="${p.artist} - ${p.title}" />`
           : `<span>ジャケット画像<br />No Image</span>`;
 
+        const commentHtml = p.comment
+          ? `<div style="font-size:11px; color:#555; margin-top:4px; white-space:pre-wrap;">${p.comment}</div>`
+          : "";
+
+        const audioHtml = p.audio_url
+          ? `<a href="${p.audio_url}"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="margin-top:4px; font-size:11px; color:#0a6cff; display:inline-block;">
+                ▶ 試聴する（外部サイト）
+             </a>`
+          : "";
+
         card.innerHTML = `
           <div class="product-image">
             ${imageContent}
@@ -643,12 +656,14 @@
           <div class="product-meta">
             <div class="product-title">${p.title}</div>
             <div class="product-artist">${p.artist}</div>
-            <div class="product-label">${p.label} / ${p.format}</div>
+            <div class="product-label">${p.label} / ${p.format || ""}</div>
             <div class="product-bottom">
               <span class="product-price">${formatYen(p.price)}</span>
-              <span class="product-condition">${p.condition}</span>
+              <span class="product-condition">${p.condition || ""}</span>
             </div>
             <div style="font-size:11px; color:#777;">残り ${p.stock} 点</div>
+            ${commentHtml}
+            ${audioHtml}
           </div>
           <button type="button" onclick="addToCart('${p.id}')">
             カートに入れる
